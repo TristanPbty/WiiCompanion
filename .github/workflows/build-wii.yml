@@ -14,10 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Wii libraries
+      - name: Check Wii toolchain
         run: |
-          dkp-pacman -Sy --noconfirm
-          dkp-pacman -S --noconfirm wiiuse bte libogc
+          echo "DEVKITPRO=$DEVKITPRO"
+          echo "DEVKITPPC=$DEVKITPPC"
+          test -f "$DEVKITPPC/wii_rules"
+          test -d "$DEVKITPRO/libogc"
 
       - name: Extract project
         run: |
