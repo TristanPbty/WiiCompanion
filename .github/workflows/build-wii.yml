@@ -39,7 +39,7 @@ jobs:
           WII_DIR="$(find . -type f -name Makefile -path '*/wii/Makefile' -print -quit | xargs dirname)"
           echo "Wii directory: $WII_DIR"
           cd "$WII_DIR"
-          make
+          make V=1
 
       - name: Upload boot.dol
         uses: actions/upload-artifact@v4
