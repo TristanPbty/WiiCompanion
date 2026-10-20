@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: devkitpro/devkitppc:latest
+      image: webhdx/devkitppc:latest
 
     steps:
       - name: Checkout repository
