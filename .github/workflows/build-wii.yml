@@ -1,4 +1,4 @@
-
+```yaml
 name: Build Wii Companion
 
 on:
@@ -8,35 +8,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: webhdx/devkitppc:latest
+      image: devkitpro/devkitppc:latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install unzip
+      - name: Install Wii libraries
         run: |
-          apt-get update
-          apt-get install -y unzip
+          dkp-pacman -Sy --noconfirm
+          dkp-pacman -S --noconfirm wiiuse bte libogc
 
       - name: Extract project
         run: |
+          apt-get update
+          apt-get install -y unzip
           unzip -o WiiCompanion_v1.zip -d project
-          find project -maxdepth 4 -type f
+          find project -name Makefile
 
-      - name: Diagnose Wii compiler
-        run: |
-          echo "PATH=$PATH"
-          which powerpc-eabi-gcc || true
-          which powerpc-eabi-ld || true
-          powerpc-eabi-gcc --version || true
-          powerpc-eabi-ld --version || true
-          ls -l /opt/devkitpro/devkitPPC/bin/ || true
-          
       - name: Compile Wii application
         run: |
           cd project
-          WII_DIR="$(find . -type f -name Makefile -path '*/wii/Makefile' -print -quit | xargs dirname)"
+          WII_DIR="$(find . -type f -path '*/wii/Makefile' -print -quit | xargs dirname)"
           echo "Wii directory: $WII_DIR"
           cd "$WII_DIR"
           make V=1
@@ -47,3 +40,4 @@ jobs:
           name: WiiCompanion-boot-dol
           path: project/**/wii/boot.dol
           if-no-files-found: error
+```
