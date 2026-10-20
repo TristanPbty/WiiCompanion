@@ -24,6 +24,15 @@ jobs:
           unzip -o WiiCompanion_v1.zip -d project
           find project -maxdepth 4 -type f
 
+      - name: Diagnose Wii compiler
+        run: |
+          echo "PATH=$PATH"
+          which powerpc-eabi-gcc || true
+          which powerpc-eabi-ld || true
+          powerpc-eabi-gcc --version || true
+          powerpc-eabi-ld --version || true
+          ls -l /opt/devkitpro/devkitPPC/bin/ || true
+          
       - name: Compile Wii application
         run: |
           cd project
