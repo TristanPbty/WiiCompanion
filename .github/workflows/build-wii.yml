@@ -5,35 +5,9 @@ on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: webhdx/devkitppc:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract project
-        run: |
-          apt-get update
-          apt-get install -y unzip
-          unzip -o WiiCompanion_v1.zip -d project
-
-            - name: Diagnose Wii libraries
-        run: |
-          echo "DEVKITPRO=$DEVKITPRO"
-          echo "DEVKITPPC=$DEVKITPPC"
-          find "$DEVKITPRO" -type f \( -name 'libogc.a' -o -name 'libwiiuse.a' -o -name 'libbte.a' \) 2>/dev/null || true
-          find /opt/devkitpro -type f \( -name 'libogc.a' -o -name 'libwiiuse.a' -o -name 'libbte.a' \) 2>/dev/null || true
-      - name: Compile Wii application
-        run: |
-          cd project
-          WII_DIR="$(find . -type f -path '*/wii/Makefile' -print -quit | xargs dirname)"
-          echo "Wii directory: $WII_DIR"
-          cd "$WII_DIR"
-          make V=1
-
-      - name: Upload boot.dol
-        uses: actions/upload-artifact@v4
-        with:
-          name: WiiCompanion-boot-dol
-          path: project/**/wii/boot.dol
-          if-no-files-found: error
+      - name: Check workflow
+        run: echo "GitHub Actions fonctionne"
