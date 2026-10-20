@@ -1,32 +1,27 @@
-```yaml
 name: Build Wii Companion
 
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkitppc:latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Check Wii toolchain
-        run: |
-          echo "DEVKITPRO=$DEVKITPRO"
-          echo "DEVKITPPC=$DEVKITPPC"
-          test -f "$DEVKITPPC/wii_rules"
-          test -d "$DEVKITPRO/libogc"
 
       - name: Extract project
         run: |
           apt-get update
           apt-get install -y unzip
           unzip -o WiiCompanion_v1.zip -d project
-          find project -name Makefile
+
+      - name: Check Wii toolchain
+        run: |
+          echo "DEVKITPRO=$DEVKITPRO"
+          echo "DEVKITPPC=$DEVKITPPC"
+          test -f "$DEVKITPPC/wii_rules"
 
       - name: Compile Wii application
         run: |
@@ -42,4 +37,3 @@ jobs:
           name: WiiCompanion-boot-dol
           path: project/**/wii/boot.dol
           if-no-files-found: error
-```
