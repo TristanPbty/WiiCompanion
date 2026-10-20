@@ -17,12 +17,12 @@ jobs:
           apt-get install -y unzip
           unzip -o WiiCompanion_v1.zip -d project
 
-      - name: Check Wii toolchain
+            - name: Diagnose Wii libraries
         run: |
           echo "DEVKITPRO=$DEVKITPRO"
           echo "DEVKITPPC=$DEVKITPPC"
-          ls -l "$DEVKITPRO/libogc/lib/wii/"
-
+          find "$DEVKITPRO" -type f \( -name 'libogc.a' -o -name 'libwiiuse.a' -o -name 'libbte.a' \) 2>/dev/null || true
+          find /opt/devkitpro -type f \( -name 'libogc.a' -o -name 'libwiiuse.a' -o -name 'libbte.a' \) 2>/dev/null || true
       - name: Compile Wii application
         run: |
           cd project
