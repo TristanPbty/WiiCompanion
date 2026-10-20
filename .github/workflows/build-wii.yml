@@ -9,22 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: devkitpro/devkitppc:latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install unzip
+        run: |
+          apt-get update
+          apt-get install -y unzip
+
       - name: Extract project
         run: |
           unzip -o WiiCompanion_v1.zip -d project
-          ls -la project
+          find project -maxdepth 4 -type f
 
       - name: Compile Wii application
-        working-directory: project/WiiCompanion_v1/wii
         run: |
+          cd project
+          WII_DIR="$(find . -type f -name Makefile -path '*/wii/Makefile' -print -quit | xargs dirname)"
+          echo "Wii directory: $WII_DIR"
+          cd "$WII_DIR"
           make
 
       - name: Upload boot.dol
         uses: actions/upload-artifact@v4
         with:
           name: WiiCompanion-boot-dol
-          path: project/WiiCompanion_v1/wii/boot.dol
+          path: project/**/wii/boot.dol
+          if-no-files-found: error
