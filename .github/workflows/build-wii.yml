@@ -24,6 +24,14 @@ jobs:
           echo "DEVKITPPC=$DEVKITPPC"
           find /opt/devkitpro -type f \( -name 'libogc.a' -o -name 'libwiiuse.a' -o -name 'libbte.a' \) 2>/dev/null || true
 
+      - name: Check Wii compiler
+        run: |
+          echo "DEVKITPRO=$DEVKITPRO"
+          echo "DEVKITPPC=$DEVKITPPC"
+          command -v powerpc-eabi-gcc
+          powerpc-eabi-gcc --version
+          ls -l "$DEVKITPPC/bin/powerpc-eabi-gcc"
+          
       - name: Compile Wii application
         run: |
           cd project
