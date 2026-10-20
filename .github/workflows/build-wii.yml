@@ -1,0 +1,24 @@
+
+name: Build Wii Companion
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/build-wii.yml"
+      - "WiiCompanion_v1.zip"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Wii toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git make gcc g++ curl
+          git clone --depth 1 https://github.com/devkitPro/pacman.git /tmp/pacman
+          echo "Toolchain setup must be completed before compilation."
+      - name: Show uploaded project
+        run: |
+          ls -la
+          echo "Project archive uploaded. Toolchain setup will be configured next."
